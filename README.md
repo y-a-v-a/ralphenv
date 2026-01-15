@@ -131,14 +131,14 @@ export MAX_THINKING_TOKENS=1024
 
 ### Option 1: SSH Keys (Automatic)
 
-SSH keys are automatically generated on first run if they don't exist.
+SSH keys are automatically generated on first run if they don't exist. Each container gets a unique key identifier based on username and container hostname (e.g., `vincentb@a3f2d9e8c1b4`), making it easy to track which key belongs to which container in GitHub.
 
 1. Start the container:
    ```bash
    docker compose run --rm devenv
    ```
 
-2. Copy the public key displayed in the logs
+2. Copy the public key displayed in the logs (note the unique identifier)
 
 3. Add it to GitHub: https://github.com/settings/keys
 

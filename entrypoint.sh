@@ -34,13 +34,17 @@ SSH_DIR="$HOME/.ssh"
 SSH_KEY="$SSH_DIR/id_ed25519"
 
 if [ ! -f "$SSH_KEY" ]; then
+  # Create unique key comment: username@hostname
+  SSH_COMMENT="${USER}@${HOSTNAME}"
+
   log "Generating SSH key for GitHub access"
   mkdir -p "$SSH_DIR"
   chmod 700 "$SSH_DIR"
-  ssh-keygen -t ed25519 -f "$SSH_KEY" -N "" -C "devenv@local"
+  ssh-keygen -t ed25519 -f "$SSH_KEY" -N "" -C "${SSH_COMMENT}"
   chmod 600 "$SSH_KEY"
   chmod 644 "$SSH_KEY.pub"
   log "SSH key generated at $SSH_KEY"
+  log "Key identifier: ${SSH_COMMENT}"
   log "Public key:"
   cat "$SSH_KEY.pub"
   log "Add this key to GitHub: https://github.com/settings/keys"
