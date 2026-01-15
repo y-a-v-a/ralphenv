@@ -2,6 +2,18 @@
 
 Portable developer environment for Claude Code with Amazon Bedrock.
 
+## Quick Start
+
+Use the provided convenience scripts:
+
+```bash
+# Docker Compose approach (recommended)
+./compose-dev.sh
+
+# Docker direct approach
+./docker-dev.sh
+```
+
 ## Build
 
 ```bash
@@ -76,19 +88,23 @@ cat .env
 Claude Code with Bedrock uses environment variables for authentication. Create a `.env` file:
 
 ```bash
+# Container user (defaults to ralphw if not set)
+# Reference: https://ghuntley.com/ralph/
+export DEV_USER=vincentb
+
 # Enable Bedrock integration
-CLAUDE_CODE_USE_BEDROCK=1
-AWS_REGION=eu-central-1  # or your preferred region
+export CLAUDE_CODE_USE_BEDROCK=1
+export AWS_REGION=eu-central-1  # or your preferred region
 
 # Bedrock authentication (bearer token approach)
-AWS_BEARER_TOKEN_BEDROCK=your_bedrock_bearer_token_here
+export AWS_BEARER_TOKEN_BEDROCK=your_bedrock_bearer_token_here
 
 # Optional: Override model settings
 # Note: Use inference profile IDs, not direct model IDs
-ANTHROPIC_MODEL=eu.anthropic.claude-opus-4-5-20251101-v1:0
-ANTHROPIC_SMALL_FAST_MODEL_AWS_REGION=eu-central-1
-CLAUDE_CODE_MAX_OUTPUT_TOKENS=4096
-MAX_THINKING_TOKENS=1024
+export ANTHROPIC_MODEL=eu.anthropic.claude-opus-4-5-20251101-v1:0
+export ANTHROPIC_SMALL_FAST_MODEL_AWS_REGION=eu-central-1
+export CLAUDE_CODE_MAX_OUTPUT_TOKENS=4096
+export MAX_THINKING_TOKENS=1024
 ```
 
 **Alternative authentication methods:**
@@ -123,7 +139,7 @@ SSH keys are automatically generated on first run if they don't exist.
 **Persistence**: To persist SSH keys across container restarts, mount `~/.ssh`:
 ```yaml
 volumes:
-  - ~/.ssh:/home/vincentb/.ssh:ro  # Read-only for security
+  - ~/.ssh:/home/${DEV_USER}/.ssh:ro  # Read-only for security
 ```
 
 ### Option 2: GitHub CLI

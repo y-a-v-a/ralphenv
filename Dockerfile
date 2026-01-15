@@ -11,6 +11,7 @@ SHELL ["/bin/bash", "-euxo", "pipefail", "-c"]
 ARG NODE_MAJOR=20
 ARG GO_VERSION=1.22.4
 ARG RUSTUP_TOOLCHAIN=stable
+ARG DEV_USER=ralphw
 
 RUN apt-get update \
   && apt-get install -y --no-install-recommends \
@@ -49,6 +50,7 @@ RUN apt-get update \
     unzip \
     gh \
     openssh-client \
+    sudo \
     nodejs \
     python3 \
     python3-venv \
@@ -75,11 +77,14 @@ RUN curl -fsSL "https://go.dev/dl/go${GO_VERSION}.linux-$(dpkg --print-architect
   && rm -f /tmp/go.tgz
 ENV PATH="/usr/local/go/bin:${PATH}"
 
-# Claude Code CLI will be installed as user vincentb below
-RUN useradd -m -s /bin/bash vincentb
+# Claude Code CLI will be installed as user ${DEV_USER} below
+RUN useradd -m -s /bin/bash ${DEV_USER} \
+  && usermod -aG sudo ${DEV_USER} \
+  && echo '%sudo ALL=(ALL) NOPASSWD:ALL' > /etc/sudoers.d/sudo-nopasswd \
+  && chmod 0440 /etc/sudoers.d/sudo-nopasswd
 
-USER vincentb
-WORKDIR /home/vincentb
+USER ${DEV_USER}
+WORKDIR /home/${DEV_USER}
 
 RUN curl -fsSL https://claude.ai/install.sh | bash \
   && echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
@@ -105,8 +110,8 @@ RUN mkdir -p /opt/devenv \
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod 755 /usr/local/bin/entrypoint.sh
 
-USER vincentb
-WORKDIR /home/vincentb
+USER ${DEV_USER}
+WORKDIR /home/${DEV_USER}
 
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 CMD ["bash"]

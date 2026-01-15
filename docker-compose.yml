@@ -1,9 +1,9 @@
-version: "3.9"
-
 services:
   devenv:
     build:
       context: .
+      args:
+        DEV_USER: ${DEV_USER:-ralphw}
     image: devenv:local
     privileged: true
     stdin_open: true
