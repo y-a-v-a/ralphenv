@@ -1,0 +1,67 @@
+# Ralph Wiggum Method - Default Prompt Template
+
+This is a template prompt for the Ralph Wiggum method. Replace this content with your project requirements.
+
+## Project Goal
+
+[Describe what you want to build]
+
+Example:
+> Build a simple task management CLI tool in Python that allows users to add, list, complete, and delete tasks. Tasks should be stored in a JSON file.
+
+## Requirements
+
+[List specific requirements]
+
+Example:
+- Use Python 3.10+
+- Command-line interface with argparse
+- JSON file for persistence
+- Commands: add, list, complete, delete
+- Each task has: id, description, completed status, created timestamp
+- Include error handling for invalid inputs
+- Add help text for all commands
+
+## Technical Constraints
+
+[Specify technologies, patterns, or limitations]
+
+Example:
+- No external dependencies except Python standard library
+- Use dataclasses for task representation
+- Follow PEP 8 style guide
+- Include docstrings for functions
+
+## Success Criteria
+
+[How will you know when it's done?]
+
+Example:
+- Can add tasks via CLI
+- Can list all tasks with their status
+- Can mark tasks as completed
+- Can delete tasks by ID
+- Persists data between runs
+- Handles errors gracefully (missing file, invalid ID, etc.)
+
+---
+
+**Tips for writing effective Ralph prompts:**
+
+1. Be specific about what you want
+2. Include technical constraints upfront
+3. Define success criteria clearly
+4. When Ralph fails, refine this prompt and let it continue
+5. Start simple, add complexity iteratively
+
+**To use this template:**
+```bash
+# Copy template to create your prompt
+cp ~/PROMPT.md.template ~/PROMPT.md
+
+# Edit with your requirements
+vim ~/PROMPT.md
+
+# Run Ralph
+ralph
+```

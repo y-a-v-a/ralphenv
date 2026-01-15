@@ -14,6 +14,17 @@ Use the provided convenience scripts:
 ./docker-dev.sh
 ```
 
+Once inside the container, try the Ralph Wiggum method:
+
+```bash
+# Copy the template and edit it
+cp ~/PROMPT.md.template ~/PROMPT.md
+vim ~/PROMPT.md
+
+# Run Ralph
+ralph
+```
+
 ## Build
 
 ```bash
@@ -181,8 +192,28 @@ Named after the bumbling Simpsons character who accidentally succeeds. The metho
 
 ### Using Ralph in this Container
 
+The container includes a `ralph` command that runs the loop for you:
+
 ```bash
-# 1. Create your prompt file
+# 1. Use the template as a starting point
+cp ~/PROMPT.md.template ~/PROMPT.md
+
+# 2. Edit your prompt file with your requirements
+vim PROMPT.md
+
+# 3. Run Ralph
+ralph
+
+# Or specify a custom prompt file
+ralph my-custom-prompt.md
+
+# 4. When things go wrong, refine PROMPT.md and let it continue
+# 5. Press Ctrl+C when done
+```
+
+**Manual approach** (if you prefer):
+```bash
+# Create your prompt file
 cat > PROMPT.md <<'EOF'
 Build a REST API in Python using FastAPI that:
 - Has endpoints for user CRUD operations
@@ -191,11 +222,8 @@ Build a REST API in Python using FastAPI that:
 - Has comprehensive error handling
 EOF
 
-# 2. Run the Ralph loop
+# Run the Ralph loop manually
 while :; do cat PROMPT.md | claude-code ; done
-
-# 3. When things go wrong, refine PROMPT.md and let it continue
-# 4. Press Ctrl+C when done
 ```
 
 ### Tips

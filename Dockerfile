@@ -110,8 +110,13 @@ RUN mkdir -p /opt/devenv \
 COPY entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod 755 /usr/local/bin/entrypoint.sh
 
+COPY ralph.sh /usr/local/bin/ralph
+RUN chmod 755 /usr/local/bin/ralph
+
 USER ${DEV_USER}
 WORKDIR /home/${DEV_USER}
+
+COPY --chown=${DEV_USER}:${DEV_USER} PROMPT.md.template /home/${DEV_USER}/PROMPT.md.template
 
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 CMD ["bash"]
