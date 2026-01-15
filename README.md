@@ -158,6 +158,61 @@ gh auth status
 
 The gh CLI stores credentials and handles authentication automatically for git operations.
 
+## The Ralph Wiggum Method
+
+This container's default username (`ralphw`) references the [Ralph Wiggum method](https://ghuntley.com/ralph/) - a technique for AI-assisted development using a continuous feedback loop.
+
+### What is Ralph?
+
+Ralph is a simple but effective approach: put your requirements in a `PROMPT.md` file and run:
+
+```bash
+while :; do cat PROMPT.md | claude-code ; done
+```
+
+This creates an infinite loop where Claude Code:
+1. Reads your requirements from PROMPT.md
+2. Generates/modifies code
+3. Repeats until you interrupt (Ctrl+C)
+
+### Why "Ralph Wiggum"?
+
+Named after the bumbling Simpsons character who accidentally succeeds. The method appears crude but can effectively produce working software through iteration. As the author notes: **"Ralph is deterministically bad in an undeterministic world"** - it produces predictable failure patterns that you refine through prompt engineering.
+
+### Using Ralph in this Container
+
+```bash
+# 1. Create your prompt file
+cat > PROMPT.md <<'EOF'
+Build a REST API in Python using FastAPI that:
+- Has endpoints for user CRUD operations
+- Uses SQLite for storage
+- Includes input validation
+- Has comprehensive error handling
+EOF
+
+# 2. Run the Ralph loop
+while :; do cat PROMPT.md | claude-code ; done
+
+# 3. When things go wrong, refine PROMPT.md and let it continue
+# 4. Press Ctrl+C when done
+```
+
+### Tips
+
+- Start with clear, specific requirements in PROMPT.md
+- Let it run and observe patterns
+- When it fails predictably, refine your prompt
+- The container's isolation ensures Ralph can't damage your host system
+- One reported case: $50k contract completed for $297 using this method
+
+### Why This Container Supports Ralph
+
+- **Isolated environment**: Ralph's mistakes stay contained
+- **Git-based workflow**: All work stays in container, push when ready
+- **Reproducible**: Rebuild from scratch anytime
+- **Cost-effective**: AWS Bedrock billing vs. direct API
+
 ## Versions
 
 Installed versions are recorded at `/opt/devenv/versions.txt` during build.
