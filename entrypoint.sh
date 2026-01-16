@@ -35,7 +35,7 @@ SSH_KEY="$SSH_DIR/id_ed25519"
 
 if [ ! -f "$SSH_KEY" ]; then
   # Create unique key comment: username@hostname
-  SSH_COMMENT="${USER}@${HOSTNAME}"
+  SSH_COMMENT="$(whoami)@${HOSTNAME}"
 
   log "Generating SSH key for GitHub access"
   mkdir -p "$SSH_DIR"
