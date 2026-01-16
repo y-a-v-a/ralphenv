@@ -29,5 +29,5 @@ echo ""
 
 # The Ralph loop
 while :; do
-  cat "$PROMPT_FILE" | claude-code
+  cat "$PROMPT_FILE" | claude --print
 done

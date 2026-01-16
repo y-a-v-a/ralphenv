@@ -178,7 +178,7 @@ This container's default username (`ralphw`) references the [Ralph Wiggum method
 Ralph is a simple but effective approach: put your requirements in a `PROMPT.md` file and run:
 
 ```bash
-while :; do cat PROMPT.md | claude-code ; done
+while :; do cat PROMPT.md | claude --print ; done
 ```
 
 This creates an infinite loop where Claude Code:
@@ -223,7 +223,7 @@ Build a REST API in Python using FastAPI that:
 EOF
 
 # Run the Ralph loop manually
-while :; do cat PROMPT.md | claude-code ; done
+while :; do cat PROMPT.md | claude --print ; done
 ```
 
 ### Tips
