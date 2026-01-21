@@ -1,17 +1,25 @@
 # devenv
 
-Portable developer environment for Claude Code with Amazon Bedrock.
+Portable developer environment for Claude Code with flexible backend support.
 
 ## Quick Start
 
-Use the provided convenience scripts:
+Use the provided convenience scripts with your preferred backend:
 
 ```bash
 # Docker Compose approach (recommended)
+# Default: AWS Bedrock
 ./compose-dev.sh
 
+# With specific backend
+./compose-dev.sh --backend bedrock      # AWS Bedrock
+./compose-dev.sh --backend api-key      # Claude API key
+./compose-dev.sh --backend subscription # Subscription-based Claude Code
+
 # Docker direct approach
-./docker-dev.sh
+./docker-dev.sh --backend bedrock
+./docker-dev.sh --backend api-key
+./docker-dev.sh --backend subscription
 ```
 
 Once inside the container, try the Ralph Wiggum method:
@@ -96,15 +104,28 @@ cat .env
 
 ## Configuration
 
-Claude Code with Bedrock uses environment variables for authentication. Create a `.env` file:
+Claude Code supports multiple backends. Choose the one that fits your needs and create a `.env` file:
+
+### Backend Selection
+
+You can select the backend in three ways:
+1. Command line argument: `./compose-dev.sh --backend api-key`
+2. Environment variable in `.env`: `export CLAUDE_BACKEND=api-key`
+3. Default: If not specified, defaults to `bedrock`
+
+### Option 1: AWS Bedrock (Default)
+
+Best for: AWS-integrated workflows, cost-effectiveness, and enterprise deployments.
 
 ```bash
 # Container user (defaults to ralphw if not set)
 # Reference: https://ghuntley.com/ralph/
 export DEV_USER=vincentb
 
-# Enable Bedrock integration
-export CLAUDE_CODE_USE_BEDROCK=1
+# Backend selection (optional, defaults to bedrock)
+export CLAUDE_BACKEND=bedrock
+
+# Bedrock configuration
 export AWS_REGION=eu-central-1  # or your preferred region
 
 # Bedrock authentication (bearer token approach)
@@ -118,14 +139,56 @@ export CLAUDE_CODE_MAX_OUTPUT_TOKENS=4096
 export MAX_THINKING_TOKENS=1024
 ```
 
-**Alternative authentication methods:**
+**Alternative AWS authentication methods:**
 - AWS Access Keys: Set `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY`, and optionally `AWS_SESSION_TOKEN`
 - AWS SSO: Claude Code supports automatic credential refresh for SSO
 
-**Portability notes:**
+### Option 2: Claude API Key
+
+Best for: Direct API access, simplicity, and non-AWS environments.
+
+```bash
+# Container user
+export DEV_USER=vincentb
+
+# Backend selection
+export CLAUDE_BACKEND=api-key
+
+# Claude API key authentication
+export ANTHROPIC_API_KEY=sk-ant-your-api-key-here
+
+# Optional: Override model settings
+export ANTHROPIC_MODEL=claude-opus-4-5-20251101
+export CLAUDE_CODE_MAX_OUTPUT_TOKENS=4096
+export MAX_THINKING_TOKENS=1024
+```
+
+Get your API key from: https://console.anthropic.com/settings/keys
+
+### Option 3: Subscription-Based
+
+Best for: Developers with Claude subscription who want to use their existing account.
+
+```bash
+# Container user
+export DEV_USER=vincentb
+
+# Backend selection
+export CLAUDE_BACKEND=subscription
+
+# Optional: Override model settings
+export CLAUDE_CODE_MAX_OUTPUT_TOKENS=4096
+export MAX_THINKING_TOKENS=1024
+```
+
+You'll need to authenticate with your Claude account when starting the container.
+
+### Portability Notes
+
 - Environment variables work seamlessly on local macOS (via docker-compose or docker run) and in AWS environments (ECS, EC2, etc.)
 - The `.env` file is for local development only and is not committed to git
 - In AWS, set these as environment variables in your service configuration
+- Backend selection makes this environment flexible for different deployment scenarios
 
 ## GitHub Authentication
 

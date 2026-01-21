@@ -5,22 +5,47 @@ log() {
   echo "[devenv] $*"
 }
 
-# Log Bedrock configuration status
-if [ "${CLAUDE_CODE_USE_BEDROCK:-0}" = "1" ]; then
-  log "Bedrock mode enabled"
-  if [ -n "${AWS_REGION:-}" ]; then
-    log "AWS_REGION: ${AWS_REGION}"
-  else
-    log "WARNING: AWS_REGION not set (required for Bedrock)"
-  fi
-  if [ -n "${AWS_BEARER_TOKEN_BEDROCK:-}" ]; then
-    log "AWS_BEARER_TOKEN_BEDROCK present"
-  else
-    log "WARNING: AWS_BEARER_TOKEN_BEDROCK not set"
-  fi
-else
-  log "Bedrock mode not enabled (set CLAUDE_CODE_USE_BEDROCK=1 to enable)"
-fi
+# Determine backend and validate credentials
+CLAUDE_BACKEND="${CLAUDE_BACKEND:-bedrock}"
+log "Claude Backend: ${CLAUDE_BACKEND}"
+
+case "${CLAUDE_BACKEND}" in
+  bedrock)
+    log "Using AWS Bedrock backend"
+    if [ -n "${AWS_REGION:-}" ]; then
+      log "AWS_REGION: ${AWS_REGION}"
+    else
+      log "WARNING: AWS_REGION not set (required for Bedrock)"
+    fi
+    if [ -n "${AWS_BEARER_TOKEN_BEDROCK:-}" ]; then
+      log "AWS_BEARER_TOKEN_BEDROCK present"
+    else
+      log "WARNING: AWS_BEARER_TOKEN_BEDROCK not set (required for Bedrock)"
+    fi
+    # Ensure Bedrock mode is enabled
+    export CLAUDE_CODE_USE_BEDROCK=1
+    ;;
+  api-key)
+    log "Using Claude API key backend"
+    if [ -n "${ANTHROPIC_API_KEY:-}" ]; then
+      log "ANTHROPIC_API_KEY present"
+    else
+      log "WARNING: ANTHROPIC_API_KEY not set (required for API key mode)"
+    fi
+    # Disable Bedrock mode
+    export CLAUDE_CODE_USE_BEDROCK=0
+    ;;
+  subscription)
+    log "Using subscription-based Claude Code"
+    log "You will need to authenticate with your Claude account"
+    # Disable Bedrock mode
+    export CLAUDE_CODE_USE_BEDROCK=0
+    ;;
+  *)
+    log "ERROR: Unknown backend '${CLAUDE_BACKEND}'. Must be: bedrock, api-key, or subscription"
+    exit 1
+    ;;
+esac
 
 if [ "${START_DOCKERD:-0}" = "1" ]; then
   log "starting dockerd"
