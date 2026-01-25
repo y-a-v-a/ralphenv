@@ -113,6 +113,21 @@ You can select the backend in three ways:
 2. Environment variable in `.env`: `export CLAUDE_BACKEND=api-key`
 3. Default: If not specified, defaults to `bedrock`
 
+**Quick Start:** Copy the appropriate example file and customize it:
+```bash
+# For AWS Bedrock
+cp .env.example.bedrock .env
+
+# For Claude API Key
+cp .env.example.api-key .env
+
+# For Subscription
+cp .env.example.subscription .env
+
+# Then edit .env with your credentials
+vim .env
+```
+
 ### Option 1: AWS Bedrock (Default)
 
 Best for: AWS-integrated workflows, cost-effectiveness, and enterprise deployments.
@@ -182,6 +197,22 @@ export MAX_THINKING_TOKENS=1024
 ```
 
 You'll need to authenticate with your Claude account when starting the container.
+
+### Switching Between Backends
+
+You can easily switch between backends without modifying your `.env` file:
+
+```bash
+# Override backend via command line
+./compose-dev.sh --backend api-key        # Use API key instead of .env setting
+./compose-dev.sh --backend subscription   # Use subscription instead of .env setting
+
+# Or export before running
+export CLAUDE_BACKEND=api-key
+./compose-dev.sh
+```
+
+This allows you to keep multiple credential sets in your `.env` and choose at runtime.
 
 ### Portability Notes
 
